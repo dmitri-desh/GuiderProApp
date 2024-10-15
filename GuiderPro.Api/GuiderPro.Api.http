@@ -1,0 +1,6 @@
+@GuiderPro.Api_HostAddress = http://localhost:5103
+
+GET {{GuiderPro.Api_HostAddress}}/api/
+Accept: application/json
+
+###
