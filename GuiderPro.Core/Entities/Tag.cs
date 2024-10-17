@@ -11,6 +11,6 @@ namespace GuiderPro.Core.Entities
         public int Id { get; set; }
         public required string Name { get; set; }
         public string? Description { get; set; }
-        public ICollection<Place> Places { get; set; } = [];
+        public ICollection<Place> Places { get; set; } = new List<Place>();
     }
 }

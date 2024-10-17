@@ -61,7 +61,7 @@ namespace GuiderPro.Api.Controllers
 
             var place = _mapper.Map<Place>(placeDto);
 
-            var result = await _placeService.CreateAsync(place);
+            var result = await _placeService.CreateAsync(place, placeDto.TagIds);
 
             if (result > 0)
             {
@@ -91,9 +91,15 @@ namespace GuiderPro.Api.Controllers
                 return NotFound();
             }   
 
-            _mapper.Map(placeDto, place); 
+            //_mapper.Map(placeDto, place);
 
-            var result = await _placeService.UpdateAsync(place);
+            place.Name = placeDto.Name;
+            place.Description = placeDto.Description;
+            place.Address = placeDto.Address;
+            place.CategoryId = placeDto.CategoryId;
+            place.Category = new Category { Id = placeDto.CategoryId, Name = placeDto.CategoryName };
+
+            var result = await _placeService.UpdateAsync(place, placeDto.TagIds);
 
             if (result > 0)
             {

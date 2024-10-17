@@ -11,8 +11,8 @@ namespace GuiderPro.Persistence.Interfaces
     {
         Task<IEnumerable<Place>> GetAllAsync();
         Task<Place?> GetByIdAsync(int id);
-        Task<int> AddAsync(Place place);
-        Task<int> UpdateAsync(Place place);
+        Task<int> AddAsync(Place place, List<int> tagIds);
+        Task<int> UpdateAsync(Place place, List<int> tagIds);
         Task<int> DeleteAsync(int id);
     }
 }

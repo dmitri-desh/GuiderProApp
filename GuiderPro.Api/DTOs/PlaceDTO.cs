@@ -8,6 +8,6 @@
         public string? Description { get; set; }
         public int CategoryId { get; set; }
         public string? CategoryName { get; set; }
-        public List<int> TagIds { get; set; } = [];
+        public List<int> TagIds { get; set; } = new List<int>();
     }
 }

@@ -11,8 +11,8 @@ namespace GuiderPro.Services.Interfaces
     {
         Task<IEnumerable<Place>> GetAllAsync();
         Task<Place?> GetByIdAsync(int id);
-        Task<int> CreateAsync(Place place);
-        Task<int> UpdateAsync(Place place);
+        Task<int> CreateAsync(Place place, List<int> tagIds);
+        Task<int> UpdateAsync(Place place, List<int> tagIds);
         Task<int> DeleteAsync(int id);
     }
 }

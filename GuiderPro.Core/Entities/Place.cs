@@ -13,7 +13,7 @@ namespace GuiderPro.Core.Entities
         public required string Address { get; set; }
         public string? Description { get; set; }
         public int CategoryId { get; set; }
-        public Category Category { get; set; } = new() { Name = string.Empty };
-        public ICollection<Tag> Tags { get; set; } = [];
+        public Category? Category { get; set; }
+        public ICollection<Tag> Tags { get; set; } = new List<Tag>();
     }
 }

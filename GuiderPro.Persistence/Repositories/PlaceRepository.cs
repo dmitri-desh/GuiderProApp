@@ -28,20 +28,68 @@ namespace GuiderPro.Persistence.Repositories
             .AsNoTracking()
             .FirstOrDefaultAsync(p => p.Id == id);
 
-        public async Task<int> AddAsync(Place place)
+        public async Task<int> AddAsync(Place place, List<int> tagIds)
         {
+            place.Tags.Clear();
+
             _context.Places.Add(place);
 
-            return await _context.SaveChangesAsync();
+           var result = await _context.SaveChangesAsync();
+
+            if (tagIds.Count > 0)
+            {
+                var tagsToAdd = await _context.Tags.Where(t => tagIds.Contains(t.Id)).AsNoTracking().ToListAsync();
+
+                foreach (var tag in tagsToAdd)
+                {
+                    place.Tags.Add(tag);
+                }
+
+                _context.Places.Update(place);
+
+               result = await _context.SaveChangesAsync();
+            }
+
+            return result;
         }
 
-        public async Task<int> UpdateAsync(Place place)
+        public async Task<int> UpdateAsync(Place place, List<int> tagIds)
         {
+            _context.Places.Update(place);
             _context.Entry(place).State = EntityState.Modified;
 
-            _context.Places.Update(place);
+            var result = await _context.SaveChangesAsync();
 
-            return await _context.SaveChangesAsync();
+            if (tagIds.Count > 0)
+            {
+                var existingTagIds = place.Tags.Select(t => t.Id).ToList();
+
+                var tagsToRemove = place.Tags.Where(t => !tagIds.Contains(t.Id)).ToList();
+                foreach (var tag in tagsToRemove)
+                {
+                    place.Tags.Remove(tag);
+                }
+
+                 var tagsToAdd = await _context.Tags
+                    .Where(t => tagIds.Contains(t.Id) && !existingTagIds.Contains(t.Id))
+                    .ToListAsync();
+
+                foreach (var tag in tagsToAdd)
+                {
+                    place.Tags.Add(tag);
+                }               
+            }
+            else
+            {
+                place.Tags.Clear();
+            }
+
+            _context.Places.Update(place);
+            _context.Entry(place).State = EntityState.Modified;
+
+            result = await _context.SaveChangesAsync();
+
+            return result;
         }
 
         public async Task<int> DeleteAsync(int id)

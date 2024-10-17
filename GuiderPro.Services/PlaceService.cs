@@ -20,24 +20,11 @@ public class PlaceService : IPlaceService
 
     public async Task<Place?> GetByIdAsync(int id) => await _placeRepository.GetByIdAsync(id);
 
-    public async Task<int> CreateAsync(Place place) => await _placeRepository.AddAsync(place);
+    public async Task<int> CreateAsync(Place place, List<int> tagIds) => await _placeRepository.AddAsync(place, tagIds);
 
-    public async Task<int> UpdateAsync(Place place)
+    public async Task<int> UpdateAsync(Place place, List<int> tagIds) 
     {
-        var tagIds = place.Tags.Select(t => t.Id).ToList();
-
-        if (place.Tags != null && place.Tags.Count > 0)
-        {
-            var tags = await _tagRepository.GetTagsByIdsAsync(tagIds);
-
-            place.Tags = tags;
-        }
-        else
-        {
-            place.Tags?.Clear(); 
-        }
-
-        return await _placeRepository.UpdateAsync(place);
+        return await _placeRepository.UpdateAsync(place, tagIds);
     }
 
     public async Task<int> DeleteAsync(int id) => await _placeRepository.DeleteAsync(id);
